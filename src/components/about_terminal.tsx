@@ -1,17 +1,29 @@
+"use client";
 
-"use client"
-
-import { SetStateAction, useState } from "react"
+import { SetStateAction, useState } from "react";
 
 export default function Terminal() {
-  const [currentCommand, setCurrentCommand] = useState("./about")
-  const [output, setOutput] = useState("")
-  const handleCommand = (command: SetStateAction<string>) => {
-    setCurrentCommand(command)
-    switch (command) {
+  const [currentCommand, setCurrentCommand] = useState("");
+  const [output, setOutput] = useState(`
+    Welcome to Jeffrey Karau Dauda's Terminal Portfolio!
+
+    Type one of the following commands to navigate:
+    
+    - './about' - Learn more about me
+    - 'bio' - See my background and interests
+    - 'skills' - Explore my technical skills
+    - 'projects' - Check out my recent projects
+    - 'contact' - Get in touch with me
+    
+    To return to this main menu, type 'home'.
+  `);
+
+  const handleCommand = (command: string) => {
+    setCurrentCommand(command);
+    switch (command.trim()) {
       case "./about":
         setOutput(`
-        Welcome to my about page! 
+        Welcome to the About section!
         
         Type the following commands to navigate:
         
@@ -19,76 +31,96 @@ export default function Terminal() {
         - 'skills' - See my technical skills
         - 'projects' - Check out my recent projects
         - 'contact' - Get in touch with me
-        `)
-        break
+        
+        To return to the main menu, type 'home'.
+        `);
+        break;
       case "bio":
         setOutput(`
-        Hi there! I'm a passionate full-stack developer with a love for building innovative web applications.
+        Hi! I'm Jeffrey Karau Dauda, a software engineer passionate about leveraging technology to solve real-world problems.
         
-        I have 5+ years of experience in the industry, working with a variety of technologies and frameworks. 
+        I have experience working with various programming languages and frameworks, and I enjoy exploring new technologies. 
         
         Some key facts about me:
-        - Based in San Francisco, CA
-        - Graduated with a Computer Science degree from UC Berkeley
-        - Enjoy learning new things and staying up-to-date with the latest trends
-        - Believe in writing clean, maintainable, and well-tested code
-        - Outside of work, I enjoy hiking, traveling, and playing the guitar
-        `)
-        break
+        - Based in Kenya
+        - Final year student at ALU, pursuing a mission in Software Engineering
+        - Co-lead and Web Technologies Lead at Google Developer Students Club (GDSC)
+        - Interested in building solutions in tech, business, and sustainability
+        
+        To return to the main menu, type 'home'.
+        `);
+        break;
       case "skills":
         setOutput(`
         Here are some of the key skills I've developed over the years:
         
-        - JavaScript (ES6+), TypeScript
-        - React, Next.js, Vue.js
-        - Node.js, Express
-        - MongoDB, PostgreSQL
-        - HTML, CSS, Tailwind CSS
+        - Python, JavaScript, Dart/Flutter, Swift/Swift-UI, Go
+        - ReactJS, Next.js, Material-UI, HTML, CSS
+        - Motoko, Solidity
+        - Firebase, MongoDB, PostgreSQL
         - Git, GitHub, CI/CD
-        - Unit testing with Jest, Enzyme, React Testing Library
         - Agile methodologies and project management
-        `)
-        break
+        
+        To return to the main menu, type 'home'.
+        `);
+        break;
       case "projects":
         setOutput(`
         Check out some of my recent projects:
         
-        1. Acme Inc. Dashboard
-           - Built a comprehensive admin dashboard for a SaaS company
-           - Utilized React, TypeScript, and Tailwind CSS
-           - Implemented features like user management, analytics, and order tracking
+        1. SafeChain
+           - A health management system on the blockchain for cross-border insurance and health management.
+           - Technologies: Internet Computer, Blockchain, React
         
-        2. Foodie - Recipe Sharing App
-           - Developed a full-stack web application for sharing recipes
-           - Used Next.js, Firebase, and Framer Motion
-           - Allowed users to create, save, and comment on recipes
+        2. FemCycle
+           - An AI-powered reproductive health and menstrual hygiene chatbot using GPT-3.
+           - Technologies: GPT-3, React, Firebase
         
-        3. Crypto Tracker
-           - Created a mobile-friendly cryptocurrency tracking app
-           - Leveraged Vue.js, Vuex, and Axios for data fetching
-           - Displayed real-time prices, market trends, and portfolio management
-        `)
-        break
+        3. Environment Compliance System
+           - A monitoring system to ensure adherence to environmental safety policies in Rwanda.
+           - Technologies: Arduino, IoT, React
+        
+        To return to the main menu, type 'home'.
+        `);
+        break;
       case "contact":
         setOutput(`
         Feel free to get in touch with me through any of the following channels:
         
-        Email: john@example.com
-        LinkedIn: linkedin.com/in/johndoe
-        GitHub: github.com/johndoe
+        Email: jeffrey@example.com
+        LinkedIn: linkedin.com/in/jeffreydauda
+        GitHub: github.com/jefftrojan
         
-        I'm always happy to chat about new opportunities, collaborate on projects, or just discuss the latest tech trends!
-        `)
-        break
+        I'm always happy to chat about new opportunities, collaborate on projects, or discuss the latest tech trends!
+        
+        To return to the main menu, type 'home'.
+        `);
+        break;
+      case "home":
+        setOutput(`
+        Welcome to Jeffrey Karau Dauda's Terminal Portfolio!
+
+        Type one of the following commands to navigate:
+        
+        - './about' - Learn more about me
+        - 'bio' - See my background and interests
+        - 'skills' - Explore my technical skills
+        - 'projects' - Check out my recent projects
+        - 'contact' - Get in touch with me
+        
+        To return to this main menu, type 'home'.
+        `);
+        break;
       default:
-        setOutput('Invalid command. Type "./about" to see the available options.')
+        setOutput(`Invalid command. Type './about' to see the available options or 'home' to return to the main menu.`);
     }
-  }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#1e1e1e] text-[#d4d4d4] font-mono">
       <div className="w-full max-w-4xl bg-[#2d2d2d] rounded-lg shadow-lg p-6 sm:p-8">
         <div className="flex items-center mb-4">
-          <span className="text-[#9cdcfe]">john@example.com</span>
+          <span className="text-[#9cdcfe]">jeffrey@example.com</span>
           <span className="text-[#ce9178] ml-2">~</span>
           <span className="text-[#b5cea8] ml-2">{currentCommand}</span>
           <span className="text-[#d4d4d4] ml-2">$</span>
@@ -99,7 +131,7 @@ export default function Terminal() {
             onChange={(e) => setCurrentCommand(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleCommand(currentCommand)
+                handleCommand(currentCommand);
               }
             }}
           />
@@ -107,5 +139,5 @@ export default function Terminal() {
         <pre className="text-[#d4d4d4] whitespace-pre-wrap break-words">{output}</pre>
       </div>
     </div>
-  )
+  );
 }
