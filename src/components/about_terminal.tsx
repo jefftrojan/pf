@@ -1,12 +1,12 @@
 
 "use client"
 
-import { useState } from "react"
+import { SetStateAction, useState } from "react"
 
-export function Terminal() {
+export default function Terminal() {
   const [currentCommand, setCurrentCommand] = useState("./about")
   const [output, setOutput] = useState("")
-  const handleCommand = (command) => {
+  const handleCommand = (command: SetStateAction<string>) => {
     setCurrentCommand(command)
     switch (command) {
       case "./about":
