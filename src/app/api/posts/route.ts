@@ -1,23 +1,25 @@
-import { NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import matter from "gray-matter";
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
-export async function GET() {
-  try {
-    const postsDirectory = path.join(process.cwd(), "posts");
-    const filenames = fs.readdirSync(postsDirectory);
+export async function GET(request: any) {
+  const postsDirectory = path.join(process.cwd(), 'posts');
+  const filenames = fs.readdirSync(postsDirectory);
 
-    const posts = filenames.map((filename) => {
-      const filePath = path.join(postsDirectory, filename);
-      const fileContents = fs.readFileSync(filePath, "utf8");
-      const { data } = matter(fileContents);
-      return { filename, data };
-    });
+  const posts = filenames.map(filename => {
+    const filePath = path.join(postsDirectory, filename);
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const { data } = matter(fileContents);
 
-    return NextResponse.json(posts);
-  } catch (error) {
-    console.error("Error fetching posts:", (error as Error).message);
-    return NextResponse.json({ error: `Error fetching posts: ${(error as Error).message}` }, { status: 500 });
-  }
+    return {
+      ...data,
+      slug: filename.replace(/\.mdx?$/, ''), // Extracting slug from filename
+    };
+  });
+
+  return new Response(JSON.stringify(posts), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 }

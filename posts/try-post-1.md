@@ -1,5 +1,5 @@
 ---
-title: "My First Post"
+title: "My First "
 date: "2024-07-27"
 author: "Jeffrey Karau Dauda"
 tags: ["nextjs", "blog"]

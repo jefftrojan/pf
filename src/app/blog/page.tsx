@@ -1,6 +1,7 @@
-"use client";
-
+'use client';
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import styles from "./blog.module.css"; // Ensure this file exists and has your styles
 
 type Post = {
   title: string;
@@ -22,16 +23,7 @@ const Blog: React.FC = () => {
         }
         return response.json();
       })
-      .then(data => {
-        const formattedPosts = data.map((post: any) => ({
-          title: post.data.title,
-          date: post.data.date,
-          author: post.data.author,
-          tags: post.data.tags,
-          slug: post.filename.replace('.md', ''),
-        }));
-        setPosts(formattedPosts);
-      })
+      .then(data => setPosts(data))
       .catch(error => setError(error.message));
   }, []);
 
@@ -43,16 +35,18 @@ const Blog: React.FC = () => {
     <div>
       <h1>Blog Posts</h1>
       {posts.length > 0 ? (
-        <ul>
+        <div className={styles.cardContainer}>
           {posts.map((post, index) => (
-            <li key={index}>
-              <h3>{post.title}</h3>
-              <p>{post.date}</p>
-              <p>By {post.author}</p>
-              <p>Tags: {post.tags ? post.tags.join(', ') : 'No tags'}</p>
-            </li>
+            <Link key={index} href={`/blog/${post.slug}`} legacyBehavior>
+              <a className={styles.card}>
+                <h3>{post.title}</h3>
+                <p>{post.date}</p>
+                <p>By {post.author}</p>
+                <p>Tags: {post.tags ? post.tags.join(', ') : 'No tags'}</p>
+              </a>
+            </Link>
           ))}
-        </ul>
+        </div>
       ) : (
         <p>No posts available.</p>
       )}
@@ -61,3 +55,4 @@ const Blog: React.FC = () => {
 };
 
 export default Blog;
+

@@ -1,0 +1,33 @@
+/* src/app/blog/[slug]/post.module.css */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .date {
+    color: #888;
+    margin-bottom: 1rem;
+  }
+  
+  .author {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .content {
+    line-height: 1.6;
+  }
+  
+  .tags {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #555;
+  }
+  

@@ -1,37 +1,46 @@
-// /app/blog/[slug]/page.tsx
+'use client';
+// src/app/blog/[slug]/page.tsx
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
-import React from 'react';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import ReactMarkdown from 'react-markdown';
+type Post = {
+  title: string;
+  date: string;
+  author: string;
+  tags: string[];
+  content: string;
+};
 
-export async function generateStaticParams() {
-  const postsDirectory = path.join(process.cwd(), 'posts');
-  const filenames = fs.readdirSync(postsDirectory);
-  return filenames.map((filename) => ({
-    slug: filename.replace(/\.md$/, ''),
-  }));
-}
+const BlogPost: React.FC = () => {
+  const { slug } = useParams();
+  const [post, setPost] = useState<Post | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-const PostPage: React.FC<{ params: { slug: string } }> = ({ params }) => {
-  const { slug } = params;
-  const postsDirectory = path.join(process.cwd(), 'posts');
-  const filePath = path.join(postsDirectory, `${slug}.md`);
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-  const { data, content } = matter(fileContents);
+  useEffect(() => {
+    fetch(`/api/posts/${slug}`)
+      .then(response => response.json())
+      .then(data => setPost(data))
+      .catch(error => setError(error.message));
+  }, [slug]);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!post) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
-      <p className="text-sm text-gray-500 mb-4">
-        {data.date} • {data.author}
-      </p>
-      <div className="prose">
-        <ReactMarkdown>{content}</ReactMarkdown>
-      </div>
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.date}</p>
+      <p>By {post.author}</p>
+      <p>Tags: {post.tags ? post.tags.join(', ') : 'No tags'}</p>
+      <ReactMarkdown>{post.content}</ReactMarkdown>
     </div>
   );
 };
 
-export default PostPage;
+export default BlogPost;
