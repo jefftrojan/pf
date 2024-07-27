@@ -3,7 +3,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button"; // Ensure the Button component is correctly imported
 
-export const CustomDialog = ({ open, onOpenChange, children }) => (
+export const CustomDialog = ({ open, onOpenChange, children }: { open: boolean, onOpenChange: (open: boolean) => void, children: React.ReactNode }) => (
   <Dialog.Root open={open} onOpenChange={onOpenChange}>
     <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50" />
     <Dialog.Content className="fixed inset-0 flex items-center justify-center p-4">
@@ -16,3 +16,5 @@ export const CustomDialog = ({ open, onOpenChange, children }) => (
     </Dialog.Content>
   </Dialog.Root>
 );
+export { Dialog };
+

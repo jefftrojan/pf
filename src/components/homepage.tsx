@@ -11,31 +11,44 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogOverlay, DialogContent } from "@/components/ui/dialog";
-import { JSX, SVGProps } from "react";
+import { Dialog, DialogOverlay, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { FaMountain as MountainIcon, FaBars as MenuIcon, FaChevronRight as ChevronRightIcon, FaFolder as FolderIcon, FaFile as FileIcon } from "react-icons/fa";
+
+// Define the type for a project
+type Project = {
+  title: string;
+  description: string;
+  liveLink: string;
+  githubLink: string;
+  imageUrl: string;
+};
 
 export default function HomePage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const projects = [
+  const projects: Project[] = [
     {
       title: "Project 1",
       description: "A brief description of Project 1.",
       liveLink: "https://example.com/project1",
       githubLink: "https://github.com/username/project1",
+      imageUrl: "/images/project1.jpg",
     },
     {
       title: "Project 2",
       description: "A brief description of Project 2.",
       liveLink: "https://example.com/project2",
       githubLink: "https://github.com/username/project2",
+      imageUrl: "/images/project2.jpg",
     },
     {
       title: "Project 3",
       description: "A brief description of Project 3.",
       liveLink: "https://example.com/project3",
       githubLink: "https://github.com/username/project3",
+      imageUrl: "/images/project3.jpg",
     },
   ];
 
@@ -157,127 +170,115 @@ export default function HomePage() {
           </section>
           <section id="projects" className="bg-[#1e1e1e] py-12 sm:py-24">
             <div className="container mx-auto max-w-4xl px-4 sm:px-6">
-              <h2 className="text-2xl font-bold sm:text-4xl">My Projects</h2>
-              <p className="mt-4 text-lg text-[#a6a6a6]">
-                Check out some of my latest projects.
-              </p>
-              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <h2 className="text-2xl font-bold sm:text-4xl">Projects</h2>
+              <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project, index) => (
-                  <Card key={index} onClick={() => setSelectedProject(project)}>
-                    <CardContent className="flex aspect-video items-center justify-center">
+                  <Card key={index} className="bg-[#2d2d2d] border border-[#424242] rounded-lg shadow-lg">
+                    <CardContent>
                       <img
-                        src="/placeholder.svg"
-                        width={300}
-                        height={200}
+                        src={project.imageUrl}
                         alt={project.title}
+                        className="w-full h-32 object-cover rounded-t-lg"
                       />
+                      <div className="p-4">
+                        <h3 className="text-lg font-semibold">{project.title}</h3>
+                        <p className="mt-2 text-sm text-[#a6a6a6]">{project.description}</p>
+                      </div>
                     </CardContent>
-                    <CardFooter className="p-4">
-                      <h3 className="text-lg font-semibold">{project.title}</h3>
+                    <CardFooter className="text-center">
+                      <Link
+                        href={project.liveLink}
+                        target="_blank"
+                        className="inline-flex items-center justify-center rounded-md bg-[#0078d4] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#005a9e] focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2"
+                        prefetch={false}
+                      >
+                        Live Demo
+                      </Link>
+                      <Link
+                        href={project.githubLink}
+                        target="_blank"
+                        className="inline-flex items-center justify-center rounded-md border border-[#424242] bg-transparent px-4 py-2 text-sm font-medium text-[#d4d4d4] shadow-sm transition-colors hover:bg-[#2d2d2d] focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2"
+                        prefetch={false}
+                      >
+                        View on GitHub
+                      </Link>
                     </CardFooter>
                   </Card>
                 ))}
               </div>
             </div>
           </section>
+          <section id="contact" className="bg-[#252526] py-12 sm:py-24">
+            <div className="container mx-auto max-w-4xl px-4 sm:px-6">
+              <h2 className="text-2xl font-bold sm:text-4xl">Contact Me</h2>
+              <p className="mt-4 text-lg text-[#a6a6a6]">
+                Feel free to reach out for collaborations or just a friendly chat.
+              </p>
+              <form className="mt-8 space-y-4">
+                <div>
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" type="text" />
+                </div>
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" />
+                </div>
+                <div>
+                  <Label htmlFor="message">Message</Label>
+                  <Textarea id="message" rows={4} />
+                </div>
+                <Button type="submit">Send Message</Button>
+              </form>
+            </div>
+          </section>
         </main>
       </div>
 
-      {/* Modal Popup for Project Details */}
       {selectedProject && (
-        <Dialog open={true} onOpenChange={() => setSelectedProject(null)}>
-          <DialogOverlay />
-          <DialogContent className="bg-[#252526] p-6 text-[#d4d4d4] rounded-lg max-w-md">
-            <h2 className="text-xl font-bold">{selectedProject.title}</h2>
-            <p className="mt-4">{selectedProject.description}</p>
-            <div className="mt-6 flex gap-4">
-              <Link
-                href={selectedProject.liveLink}
-                target="_blank"
-                className="inline-flex items-center justify-center rounded-md bg-[#0078d4] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#005a9e] focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2"
-                prefetch={false}
-              >
-                Live Demo
-              </Link>
-              <Link
-                href={selectedProject.githubLink}
-                target="_blank"
-                className="inline-flex items-center justify-center rounded-md border border-[#424242] bg-transparent px-4 py-2 text-sm font-medium text-[#d4d4d4] shadow-sm transition-colors hover:bg-[#2d2d2d] focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2"
-                prefetch={false}
-              >
-                View on GitHub
-              </Link>
+        <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
+          <DialogOverlay className="fixed inset-0 bg-black/50" />
+          <DialogContent className="fixed inset-0 m-auto w-[90%] max-w-3xl p-6 bg-[#2d2d2d] rounded-lg shadow-lg overflow-y-auto">
+            <VisuallyHidden>
+              <DialogTitle>{selectedProject.title}</DialogTitle>
+            </VisuallyHidden>
+            <div className="flex flex-col lg:flex-row">
+              <img
+                src={selectedProject.imageUrl}
+                alt={selectedProject.title}
+                className="w-full lg:w-1/2 h-auto object-cover rounded-lg"
+              />
+              <div className="lg:ml-6 mt-4 lg:mt-0 lg:w-1/2">
+                <h2 className="text-2xl font-bold">{selectedProject.title}</h2>
+                <p className="mt-4">{selectedProject.description}</p>
+                <div className="mt-6 flex gap-4">
+                  <Link
+                    href={selectedProject.liveLink}
+                    target="_blank"
+                    className="inline-flex items-center justify-center rounded-md bg-[#0078d4] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#005a9e] focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2"
+                    prefetch={false}
+                  >
+                    Live Demo
+                  </Link>
+                  <Link
+                    href={selectedProject.githubLink}
+                    target="_blank"
+                    className="inline-flex items-center justify-center rounded-md border border-[#424242] bg-transparent px-4 py-2 text-sm font-medium text-[#d4d4d4] shadow-sm transition-colors hover:bg-[#2d2d2d] focus:outline-none focus:ring-2 focus:ring-[#0078d4] focus:ring-offset-2"
+                    prefetch={false}
+                  >
+                    View on GitHub
+                  </Link>
+                </div>
+                <Button
+                  onClick={() => setSelectedProject(null)}
+                  className="mt-6"
+                >
+                  Close
+                </Button>
+              </div>
             </div>
-            <Button
-              onClick={() => setSelectedProject(null)}
-              className="mt-6"
-            >
-              Close
-            </Button>
           </DialogContent>
         </Dialog>
       )}
     </div>
   );
 }
-
-// Icons (You can replace these with your SVGs or other icons)
-const MenuIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" {...props}>
-    <path
-      d="M4 6h16M4 12h16M4 18h16"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const FolderIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" {...props}>
-    <path
-      d="M4 4h4l2 2h10v12H4V4z"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const FileIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" {...props}>
-    <path
-      d="M12 3v4a1 1 0 001 1h4M16 8V5.5a2.5 2.5 0 00-2.5-2.5H9a2 2 0 00-2 2v12a2 2 0 002 2h6a2 2 0 002-2V8h-3z"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const MountainIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" {...props}>
-    <path
-      d="M2 17l6-6 4 4 8-8 4 4"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const ChevronRightIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => (
-  <svg viewBox="0 0 24 24" fill="none" {...props}>
-    <path
-      d="M9 18l6-6-6-6"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
